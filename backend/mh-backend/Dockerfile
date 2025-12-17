@@ -1,17 +1,16 @@
-# Use Java 17 (recommended for Spring Boot)
-FROM eclipse-temurin:17-jdk
-
-# Set working directory
+FROM maven:3.9.9-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copy backend source
 COPY . .
-
-# Build the application
+RUN chmod +x mvnw
 RUN ./mvnw clean package -DskipTests
 
-# Expose Spring Boot port
-EXPOSE 8080
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
 
-# Run the app
-CMD ["java", "-jar", "target/*.jar"]
+COPY --from=build /app/target/*.jar app.jar
+
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
+

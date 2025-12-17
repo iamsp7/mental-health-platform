@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/mental-health-platform/static/css/main.c4903932.css",
-    "main.js": "/mental-health-platform/static/js/main.dfd90933.js",
-    "static/js/14.93af90af.chunk.js": "/mental-health-platform/static/js/14.93af90af.chunk.js",
+    "main.js": "/mental-health-platform/static/js/main.1f1bf6a3.js",
+    "static/js/14.2f865dd0.chunk.js": "/mental-health-platform/static/js/14.2f865dd0.chunk.js",
     "static/js/490.4e6fecd5.chunk.js": "/mental-health-platform/static/js/490.4e6fecd5.chunk.js",
-    "static/js/936.1b6b218e.chunk.js": "/mental-health-platform/static/js/936.1b6b218e.chunk.js",
-    "static/js/414.25a1a869.chunk.js": "/mental-health-platform/static/js/414.25a1a869.chunk.js",
+    "static/js/936.f8d096c6.chunk.js": "/mental-health-platform/static/js/936.f8d096c6.chunk.js",
+    "static/js/414.c3aa8c83.chunk.js": "/mental-health-platform/static/js/414.c3aa8c83.chunk.js",
     "static/js/609.2b9c3daa.chunk.js": "/mental-health-platform/static/js/609.2b9c3daa.chunk.js",
     "static/js/867.3b00eb65.chunk.js": "/mental-health-platform/static/js/867.3b00eb65.chunk.js",
-    "static/js/861.3d8c68b6.chunk.js": "/mental-health-platform/static/js/861.3d8c68b6.chunk.js",
+    "static/js/861.49517fd7.chunk.js": "/mental-health-platform/static/js/861.49517fd7.chunk.js",
     "static/js/941.f7aefb7a.chunk.js": "/mental-health-platform/static/js/941.f7aefb7a.chunk.js",
     "static/js/869.2c226a36.chunk.js": "/mental-health-platform/static/js/869.2c226a36.chunk.js",
     "static/js/521.e3b44788.chunk.js": "/mental-health-platform/static/js/521.e3b44788.chunk.js",
@@ -17,14 +17,14 @@
     "static/js/453.d7446e4a.chunk.js": "/mental-health-platform/static/js/453.d7446e4a.chunk.js",
     "index.html": "/mental-health-platform/index.html",
     "main.c4903932.css.map": "/mental-health-platform/static/css/main.c4903932.css.map",
-    "main.dfd90933.js.map": "/mental-health-platform/static/js/main.dfd90933.js.map",
-    "14.93af90af.chunk.js.map": "/mental-health-platform/static/js/14.93af90af.chunk.js.map",
+    "main.1f1bf6a3.js.map": "/mental-health-platform/static/js/main.1f1bf6a3.js.map",
+    "14.2f865dd0.chunk.js.map": "/mental-health-platform/static/js/14.2f865dd0.chunk.js.map",
     "490.4e6fecd5.chunk.js.map": "/mental-health-platform/static/js/490.4e6fecd5.chunk.js.map",
-    "936.1b6b218e.chunk.js.map": "/mental-health-platform/static/js/936.1b6b218e.chunk.js.map",
-    "414.25a1a869.chunk.js.map": "/mental-health-platform/static/js/414.25a1a869.chunk.js.map",
+    "936.f8d096c6.chunk.js.map": "/mental-health-platform/static/js/936.f8d096c6.chunk.js.map",
+    "414.c3aa8c83.chunk.js.map": "/mental-health-platform/static/js/414.c3aa8c83.chunk.js.map",
     "609.2b9c3daa.chunk.js.map": "/mental-health-platform/static/js/609.2b9c3daa.chunk.js.map",
     "867.3b00eb65.chunk.js.map": "/mental-health-platform/static/js/867.3b00eb65.chunk.js.map",
-    "861.3d8c68b6.chunk.js.map": "/mental-health-platform/static/js/861.3d8c68b6.chunk.js.map",
+    "861.49517fd7.chunk.js.map": "/mental-health-platform/static/js/861.49517fd7.chunk.js.map",
     "941.f7aefb7a.chunk.js.map": "/mental-health-platform/static/js/941.f7aefb7a.chunk.js.map",
     "869.2c226a36.chunk.js.map": "/mental-health-platform/static/js/869.2c226a36.chunk.js.map",
     "521.e3b44788.chunk.js.map": "/mental-health-platform/static/js/521.e3b44788.chunk.js.map",
@@ -34,6 +34,6 @@
   },
   "entrypoints": [
     "static/css/main.c4903932.css",
-    "static/js/main.dfd90933.js"
+    "static/js/main.1f1bf6a3.js"
   ]
 }

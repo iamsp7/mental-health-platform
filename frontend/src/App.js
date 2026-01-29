@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState, useEffect, lazy, Suspense } from "react";
 import {
   HashRouter,
@@ -8,14 +7,13 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
-
 import { Toaster } from "react-hot-toast";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
+import { ThemeProvider, useTheme } from "./context/ThemeContext";
 
-/* ================= LAZY LOADED PAGES ================= */
-
+/* Lazy pages */
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 const Journal = lazy(() => import("./pages/Journal"));
@@ -24,13 +22,10 @@ const Doctors = lazy(() => import("./pages/Doctors"));
 const BookAppointment = lazy(() => import("./pages/BookAppointment"));
 const MyAppointments = lazy(() => import("./pages/MyAppointments"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
-
 const SupportChoice = lazy(() => import("./pages/SupportChoice"));
 const MusicPage = lazy(() => import("./pages/MusicPage"));
 const VideoPage = lazy(() => import("./pages/VideoPage"));
 const DoctorPage = lazy(() => import("./pages/DoctorPage"));
-
-/* ================= APP ROUTER ================= */
 
 function AppRouterWrapper() {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -38,8 +33,8 @@ function AppRouterWrapper() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const { theme } = useTheme();
 
-  // clear session if token missing
   useEffect(() => {
     if (!token) {
       localStorage.clear();
@@ -64,30 +59,34 @@ function AppRouterWrapper() {
     }, 300);
   }
 
-  // show navbar ONLY on authenticated pages
-  const showNavbar =
-    token && !["/login", "/register"].includes(location.pathname);
+  const hideNavbar = ["/login", "/register"].includes(location.pathname);
 
   return (
-    <div className="min-h-screen">
-      {/* 🔔 GLOBAL TOASTER */}
+    <div className="min-h-screen bg-white dark:bg-slate-950">
+      {/* THEME-AWARE TOASTER */}
       <Toaster
         position="top-right"
         toastOptions={{
           duration: 3000,
-          style: {
-            borderRadius: "14px",
-            background: "#0f172a",
-            color: "#f8fafc",
-          },
+          style:
+            theme === "dark"
+              ? {
+                  background: "#0f172a",
+                  color: "#e5e7eb",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                }
+              : {
+                  background: "#ffffff",
+                  color: "#1f2937",
+                  border: "1px solid #e5e7eb",
+                },
         }}
       />
 
-      {showNavbar && (
+      {!hideNavbar && (
         <Navbar loggedUser={username} onLogout={handleLogout} />
       )}
 
-      {/* 🚀 LAZY LOAD ROUTES */}
       <Suspense
         fallback={
           <div className="flex items-center justify-center h-[70vh] text-gray-500">
@@ -96,11 +95,9 @@ function AppRouterWrapper() {
         }
       >
         <Routes>
-          {/* ================= AUTH ================= */}
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/register" element={<Register />} />
 
-          {/* ================= PROTECTED ================= */}
           <Route
             path="/dashboard"
             element={
@@ -155,13 +152,11 @@ function AppRouterWrapper() {
             }
           />
 
-          {/* ================= SUPPORT ================= */}
           <Route path="/support" element={<SupportChoice />} />
           <Route path="/support/music" element={<MusicPage />} />
           <Route path="/support/videos" element={<VideoPage />} />
           <Route path="/support/doctors" element={<DoctorPage />} />
 
-          {/* ================= FALLBACK ================= */}
           <Route
             path="*"
             element={<Navigate to={token ? "/dashboard" : "/login"} />}
@@ -172,12 +167,13 @@ function AppRouterWrapper() {
   );
 }
 
-/* ================= ROOT ================= */
-
+/* ROOT */
 export default function App() {
   return (
-    <HashRouter>
-      <AppRouterWrapper />
-    </HashRouter>
+    <ThemeProvider>
+      <HashRouter>
+        <AppRouterWrapper />
+      </HashRouter>
+    </ThemeProvider>
   );
 }

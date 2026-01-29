@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const API = "http://localhost:8080/api/appointments";
 
 export default function BookAppointment({ token }) {
-  const { state } = useLocation(); // doctor info
+  const { state } = useLocation();
   const navigate = useNavigate();
 
   const [date, setDate] = useState("");
@@ -14,14 +15,17 @@ export default function BookAppointment({ token }) {
 
   if (!state) {
     return (
-      <div className="text-center py-10 text-gray-500">
+      <div className="min-h-screen flex items-center justify-center text-gray-500 dark:text-slate-400">
         No doctor selected.
       </div>
     );
   }
 
   const submit = async () => {
-    if (!date || !timeSlot) return;
+    if (!date || !timeSlot) {
+      toast.error("Please select date and time");
+      return;
+    }
 
     setLoading(true);
 
@@ -41,92 +45,159 @@ export default function BookAppointment({ token }) {
         }),
       });
 
+      toast.success("Appointment booked successfully 🗓️");
       navigate("/my-appointments");
-    } catch (err) {
-      console.error("Booking failed", err);
+    } catch {
+      toast.error("Booking failed. Try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto px-4 py-8">
-      <div className="bg-white rounded-2xl shadow p-6">
-        
-        {/* Header */}
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            Book Appointment
-          </h2>
-          <p className="text-sm text-gray-500 mt-1">
-            Schedule a consultation
-          </p>
-        </div>
+    <div
+      className="
+        min-h-screen px-4 py-10
+        bg-gradient-to-br
+        from-indigo-100 via-white to-purple-100
+        dark:from-slate-900 dark:via-slate-950 dark:to-indigo-950
+      "
+    >
+      <div className="max-w-xl mx-auto">
 
-        {/* Doctor info */}
-        <div className="mb-6 p-4 bg-indigo-50 rounded-lg">
-          <p className="font-medium text-indigo-700">
-            {state.name}
-          </p>
-          <p className="text-sm text-indigo-600">
-            {state.specialization}
-          </p>
-        </div>
+        <div
+          className="
+            group relative rounded-2xl p-6
+            backdrop-blur-xl
+            bg-white/70 dark:bg-white/10
+            border border-gray-200 dark:border-white/20
+            shadow-[0_12px_30px_rgba(0,0,0,0.15)]
+            dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)]
+            transition-all duration-300
+            hover:shadow-[0_28px_65px_rgba(0,0,0,0.35)]
+            dark:hover:shadow-[0_40px_90px_rgba(0,0,0,0.75)]
+            hover:scale-[1.03]
+          "
+        >
+          {/* Glow */}
+          <div
+            className="
+              pointer-events-none absolute inset-0 rounded-2xl
+              bg-gradient-to-br from-indigo-400/15 to-transparent
+              opacity-0 group-hover:opacity-100
+              transition-opacity
+            "
+          />
 
-        {/* Form */}
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm text-gray-600 mb-1">
-              Appointment Date
-            </label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-            />
+          {/* Header */}
+          <div className="relative z-10 mb-6">
+            <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
+              Book Appointment
+            </h2>
+            <p className="text-sm text-gray-600 dark:text-slate-300 mt-1">
+              Schedule a consultation
+            </p>
           </div>
 
-          <div>
-            <label className="block text-sm text-gray-600 mb-1">
-              Time Slot
-            </label>
-            <select
-              value={timeSlot}
-              onChange={(e) => setTimeSlot(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-            >
-              <option value="">Select a time</option>
-              <option>10:00 AM</option>
-              <option>11:00 AM</option>
-              <option>2:00 PM</option>
-              <option>4:00 PM</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm text-gray-600 mb-1">
-              Note (optional)
-            </label>
-            <textarea
-              rows={3}
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg resize-none focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-              placeholder="Anything you'd like the doctor to know"
-            />
-          </div>
-        </div>
-
-        {/* Action */}
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={submit}
-            disabled={loading}
-            className="px-6 py-2 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition disabled:opacity-50"
+          {/* Doctor info */}
+          <div
+            className="
+              relative z-10 mb-6 p-4 rounded-xl
+              bg-indigo-500/10
+              border border-indigo-400/20
+            "
           >
-            {loading ? "Booking..." : "Confirm Appointment"}
-          </button>
+            <p className="font-medium text-indigo-700 dark:text-indigo-200">
+              {state.name}
+            </p>
+            <p className="text-sm text-indigo-600 dark:text-indigo-300">
+              {state.specialization}
+            </p>
+          </div>
+
+          {/* Form */}
+          <div className="relative z-10 space-y-4">
+
+            <div>
+              <label className="block text-sm text-gray-600 dark:text-slate-300 mb-1">
+                Appointment Date
+              </label>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="
+                  w-full px-4 py-2 rounded-xl
+                  bg-white dark:bg-slate-900/70
+                  text-gray-800 dark:text-slate-200
+                  border border-gray-300 dark:border-white/10
+                  focus:ring-2 focus:ring-indigo-500/40
+                  focus:outline-none
+                "
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-600 dark:text-slate-300 mb-1">
+                Time Slot
+              </label>
+              <select
+                value={timeSlot}
+                onChange={(e) => setTimeSlot(e.target.value)}
+                className="
+                  w-full px-4 py-2 rounded-xl
+                  bg-white dark:bg-slate-900/70
+                  text-gray-800 dark:text-slate-200
+                  border border-gray-300 dark:border-white/10
+                  focus:ring-2 focus:ring-indigo-500/40
+                  focus:outline-none
+                "
+              >
+                <option value="">Select a time</option>
+                <option>10:00 AM</option>
+                <option>11:00 AM</option>
+                <option>2:00 PM</option>
+                <option>4:00 PM</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-600 dark:text-slate-300 mb-1">
+                Note (optional)
+              </label>
+              <textarea
+                rows={3}
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="Anything you'd like the doctor to know"
+                className="
+                  w-full px-4 py-2 rounded-xl resize-none
+                  bg-white dark:bg-slate-900/70
+                  text-gray-800 dark:text-slate-200
+                  border border-gray-300 dark:border-white/10
+                  placeholder-gray-400 dark:placeholder-slate-400
+                  focus:ring-2 focus:ring-indigo-500/40
+                  focus:outline-none
+                "
+              />
+            </div>
+          </div>
+
+          {/* Action */}
+          <div className="relative z-10 mt-6 flex justify-end">
+            <button
+              onClick={submit}
+              disabled={loading}
+              className="
+                px-6 py-2 rounded-xl
+                bg-indigo-600 text-white font-medium
+                hover:bg-indigo-500 transition
+                disabled:opacity-50
+              "
+            >
+              {loading ? "Booking..." : "Confirm Appointment"}
+            </button>
+          </div>
         </div>
       </div>
     </div>

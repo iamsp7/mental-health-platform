@@ -114,7 +114,13 @@ export default function Dashboard({ username }) {
               tooltip="View mood trends"
               onClick={() => navigate("/mood-history")}
             />
-
+<Card
+  icon="🤖"
+  title="AI Chat Support"
+  desc="Talk to your mental wellness assistant anytime."
+  tooltip="Chat with AI"
+  onClick={() => navigate("/chatbot")}
+/>
             <Card
               icon="🫂"
               title="Get Support"

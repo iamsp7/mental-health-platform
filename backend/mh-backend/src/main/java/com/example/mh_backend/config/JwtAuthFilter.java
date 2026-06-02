@@ -40,7 +40,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-
+          
             String username = JwtUtil.extractUsername(token);
             String role = JwtUtil.extractRole(token); // e.g. "USER"
 
@@ -49,8 +49,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                             username,
                             null,
                             List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                            
                     );
-
+            System.out.println("ROLE FROM TOKEN: " + role);
             authentication.setDetails(
                     new WebAuthenticationDetailsSource().buildDetails(request)
             );

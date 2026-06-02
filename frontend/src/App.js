@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, lazy, Suspense } from "react";
 import {
   HashRouter,
@@ -26,10 +27,13 @@ const SupportChoice = lazy(() => import("./pages/SupportChoice"));
 const MusicPage = lazy(() => import("./pages/MusicPage"));
 const VideoPage = lazy(() => import("./pages/VideoPage"));
 const DoctorPage = lazy(() => import("./pages/DoctorPage"));
+const DoctorDashboard = lazy(() => import("./pages/DoctorDashboard"));
+const Chatbot = lazy(() => import("./pages/Chatbot"));
 
 function AppRouterWrapper() {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [username, setUsername] = useState(localStorage.getItem("username"));
+  const [role, setRole] = useState(localStorage.getItem("role"));
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -39,22 +43,36 @@ function AppRouterWrapper() {
     if (!token) {
       localStorage.clear();
       setUsername(null);
+      setRole(null);
     }
   }, [token]);
+
+  /* LOGIN HANDLER */
 
   function handleLogin(data) {
     localStorage.setItem("token", data.token);
     localStorage.setItem("username", data.username);
+    localStorage.setItem("role", data.role);
+
     setToken(data.token);
     setUsername(data.username);
-    navigate("/dashboard");
+    setRole(data.role);
+
+    if (data.role === "DOCTOR") {
+      navigate("/doctor-dashboard");
+    } else {
+      navigate("/dashboard");
+    }
   }
+
+  /* LOGOUT */
 
   function handleLogout() {
     setTimeout(() => {
       localStorage.clear();
       setToken(null);
       setUsername(null);
+      setRole(null);
       navigate("/login");
     }, 300);
   }
@@ -63,7 +81,9 @@ function AppRouterWrapper() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950">
-      {/* THEME-AWARE TOASTER */}
+
+      {/* TOASTER */}
+
       <Toaster
         position="top-right"
         toastOptions={{
@@ -95,8 +115,12 @@ function AppRouterWrapper() {
         }
       >
         <Routes>
+
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
+
           <Route path="/register" element={<Register />} />
+
+          {/* USER DASHBOARD */}
 
           <Route
             path="/dashboard"
@@ -142,7 +166,14 @@ function AppRouterWrapper() {
               </ProtectedRoute>
             }
           />
-
+<Route
+  path="/chatbot"
+  element={
+    <ProtectedRoute token={token}>
+      <Chatbot token={token} />
+    </ProtectedRoute>
+  }
+/>
           <Route
             path="/my-appointments"
             element={
@@ -152,22 +183,50 @@ function AppRouterWrapper() {
             }
           />
 
+          {/* DOCTOR DASHBOARD */}
+
+          <Route
+            path="/doctor-dashboard"
+            element={
+              <ProtectedRoute token={token} requiredRole="DOCTOR">
+                <DoctorDashboard token={token} />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* SUPPORT */}
+
           <Route path="/support" element={<SupportChoice />} />
           <Route path="/support/music" element={<MusicPage />} />
           <Route path="/support/videos" element={<VideoPage />} />
           <Route path="/support/doctors" element={<DoctorPage />} />
 
+          {/* DEFAULT REDIRECT */}
+
           <Route
             path="*"
-            element={<Navigate to={token ? "/dashboard" : "/login"} />}
+            element={
+              <Navigate
+                to={
+                  token
+                    ? role === "DOCTOR"
+                      ? "/doctor-dashboard"
+                      : "/dashboard"
+                    : "/login"
+                }
+              />
+            }
           />
+
         </Routes>
       </Suspense>
     </div>
   );
 }
 
+
 /* ROOT */
+
 export default function App() {
   return (
     <ThemeProvider>
@@ -177,3 +236,4 @@ export default function App() {
     </ThemeProvider>
   );
 }
+

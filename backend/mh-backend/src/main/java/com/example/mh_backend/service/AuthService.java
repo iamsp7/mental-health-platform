@@ -28,24 +28,44 @@ public class AuthService {
     }
 
     public String register(RegisterRequest req) {
+
         if (req.getUsername() == null || req.getEmail() == null || req.getPassword() == null) {
             throw new IllegalArgumentException("Missing fields");
         }
+
         if (userRepository.existsByUsername(req.getUsername())) {
             throw new IllegalArgumentException("Username already taken");
         }
+
         if (userRepository.existsByEmail(req.getEmail())) {
             throw new IllegalArgumentException("Email already in use");
         }
 
         Role role = Role.USER;
-        if (req.getRole() != null && req.getRole().equalsIgnoreCase("ADMIN")) {
-            role = Role.ADMIN;
+
+        if (req.getRole() != null) {
+
+            if (req.getRole().equalsIgnoreCase("ADMIN")) {
+                role = Role.ADMIN;
+            }
+
+            else if (req.getRole().equalsIgnoreCase("DOCTOR")) {
+                role = Role.DOCTOR;
+            }
+
         }
 
         String hashed = passwordEncoder.encode(req.getPassword());
-        User user = new User(req.getUsername(), req.getEmail(), hashed, role);
+
+        User user = new User(
+            req.getUsername(),
+            req.getEmail(),
+            hashed,
+            role
+        );
+
         userRepository.save(user);
+
         return "User registered";
     }
 

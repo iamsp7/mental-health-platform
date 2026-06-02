@@ -1,13 +1,12 @@
 package com.example.mh_backend.config;
 
-
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 @Configuration
 public class SecurityConfig {
 
@@ -25,17 +24,24 @@ public class SecurityConfig {
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()
 
-                // 🔴 THESE TWO ARE REQUIRED
-                .requestMatchers("/api/journal/**").authenticated()
-                .requestMatchers("/api/appointments/**").authenticated()
+            	    // Public endpoints
+            	    .requestMatchers("/api/auth/**").permitAll()
+            	    .requestMatchers("/h2-console/**").permitAll()
 
-                .anyRequest().authenticated()
-            )
+            	    // Doctor endpoints
+            	    .requestMatchers("/api/doctor/**").hasRole("DOCTOR")
 
-            // 🔑 JWT FILTER
+            	    // User endpoints
+            	    .requestMatchers("/api/appointments/**").hasAnyRole("USER","ADMIN")
+
+            	    // Journal can be used by both
+            	    .requestMatchers("/api/journal/**").hasAnyRole("USER", "DOCTOR","ADMIN")
+
+            	    // everything else
+            	    .anyRequest().authenticated()
+            	)
+
             .addFilterBefore(
                 jwtAuthFilter(),
                 UsernamePasswordAuthenticationFilter.class

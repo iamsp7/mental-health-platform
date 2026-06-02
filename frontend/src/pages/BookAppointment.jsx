@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -5,6 +6,7 @@ import toast from "react-hot-toast";
 const API = "http://localhost:8080/api/appointments";
 
 export default function BookAppointment({ token }) {
+
   const { state } = useLocation();
   const navigate = useNavigate();
 
@@ -22,6 +24,7 @@ export default function BookAppointment({ token }) {
   }
 
   const submit = async () => {
+
     if (!date || !timeSlot) {
       toast.error("Please select date and time");
       return;
@@ -30,31 +33,51 @@ export default function BookAppointment({ token }) {
     setLoading(true);
 
     try {
+
       await fetch(API, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+
         body: JSON.stringify({
+
           doctorName: state.name,
+
+          // 🔑 IMPORTANT
+          doctorUsername: state.username,
+
           specialization: state.specialization,
+
           appointmentDate: date,
+
           timeSlot,
-          note,
+
+          note
+
         }),
+
       });
 
       toast.success("Appointment booked successfully 🗓️");
+
       navigate("/my-appointments");
+
     } catch {
+
       toast.error("Booking failed. Try again.");
+
     } finally {
+
       setLoading(false);
+
     }
+
   };
 
   return (
+
     <div
       className="
         min-h-screen px-4 py-10
@@ -63,6 +86,7 @@ export default function BookAppointment({ token }) {
         dark:from-slate-900 dark:via-slate-950 dark:to-indigo-950
       "
     >
+
       <div className="max-w-xl mx-auto">
 
         <div
@@ -73,55 +97,43 @@ export default function BookAppointment({ token }) {
             border border-gray-200 dark:border-white/20
             shadow-[0_12px_30px_rgba(0,0,0,0.15)]
             dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)]
-            transition-all duration-300
-            hover:shadow-[0_28px_65px_rgba(0,0,0,0.35)]
-            dark:hover:shadow-[0_40px_90px_rgba(0,0,0,0.75)]
-            hover:scale-[1.03]
           "
         >
-          {/* Glow */}
-          <div
-            className="
-              pointer-events-none absolute inset-0 rounded-2xl
-              bg-gradient-to-br from-indigo-400/15 to-transparent
-              opacity-0 group-hover:opacity-100
-              transition-opacity
-            "
-          />
 
-          {/* Header */}
-          <div className="relative z-10 mb-6">
+          <div className="mb-6">
+
             <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
               Book Appointment
             </h2>
-            <p className="text-sm text-gray-600 dark:text-slate-300 mt-1">
+
+            <p className="text-sm text-gray-600 dark:text-slate-300">
               Schedule a consultation
             </p>
+
           </div>
 
           {/* Doctor info */}
-          <div
-            className="
-              relative z-10 mb-6 p-4 rounded-xl
-              bg-indigo-500/10
-              border border-indigo-400/20
-            "
-          >
+
+          <div className="mb-6 p-4 rounded-xl bg-indigo-500/10 border border-indigo-400/20">
+
             <p className="font-medium text-indigo-700 dark:text-indigo-200">
               {state.name}
             </p>
+
             <p className="text-sm text-indigo-600 dark:text-indigo-300">
               {state.specialization}
             </p>
+
           </div>
 
-          {/* Form */}
-          <div className="relative z-10 space-y-4">
+          <div className="space-y-4">
 
             <div>
+
               <label className="block text-sm text-gray-600 dark:text-slate-300 mb-1">
                 Appointment Date
               </label>
+
               <input
                 type="date"
                 value={date}
@@ -129,42 +141,44 @@ export default function BookAppointment({ token }) {
                 className="
                   w-full px-4 py-2 rounded-xl
                   bg-white dark:bg-slate-900/70
-                  text-gray-800 dark:text-slate-200
                   border border-gray-300 dark:border-white/10
-                  focus:ring-2 focus:ring-indigo-500/40
-                  focus:outline-none
                 "
               />
+
             </div>
 
             <div>
+
               <label className="block text-sm text-gray-600 dark:text-slate-300 mb-1">
                 Time Slot
               </label>
+
               <select
                 value={timeSlot}
                 onChange={(e) => setTimeSlot(e.target.value)}
                 className="
                   w-full px-4 py-2 rounded-xl
                   bg-white dark:bg-slate-900/70
-                  text-gray-800 dark:text-slate-200
                   border border-gray-300 dark:border-white/10
-                  focus:ring-2 focus:ring-indigo-500/40
-                  focus:outline-none
                 "
               >
+
                 <option value="">Select a time</option>
                 <option>10:00 AM</option>
                 <option>11:00 AM</option>
                 <option>2:00 PM</option>
                 <option>4:00 PM</option>
+
               </select>
+
             </div>
 
             <div>
+
               <label className="block text-sm text-gray-600 dark:text-slate-300 mb-1">
                 Note (optional)
               </label>
+
               <textarea
                 rows={3}
                 value={note}
@@ -173,33 +187,40 @@ export default function BookAppointment({ token }) {
                 className="
                   w-full px-4 py-2 rounded-xl resize-none
                   bg-white dark:bg-slate-900/70
-                  text-gray-800 dark:text-slate-200
                   border border-gray-300 dark:border-white/10
-                  placeholder-gray-400 dark:placeholder-slate-400
-                  focus:ring-2 focus:ring-indigo-500/40
-                  focus:outline-none
                 "
               />
+
             </div>
+
           </div>
 
-          {/* Action */}
-          <div className="relative z-10 mt-6 flex justify-end">
+          <div className="mt-6 flex justify-end">
+
             <button
               onClick={submit}
               disabled={loading}
               className="
                 px-6 py-2 rounded-xl
-                bg-indigo-600 text-white font-medium
-                hover:bg-indigo-500 transition
+                bg-indigo-600 text-white
+                hover:bg-indigo-500
                 disabled:opacity-50
               "
             >
+
               {loading ? "Booking..." : "Confirm Appointment"}
+
             </button>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
+
   );
+
 }
+

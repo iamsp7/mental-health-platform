@@ -34,8 +34,11 @@ export default function DoctorDashboard({ token }) {
   };
 
   useEffect(() => {
-    if (token) loadAppointments();
-  }, [token]);
+  if (token) {
+    loadAppointments();
+  }
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [token]);
 
   const accept = async (id) => {
 

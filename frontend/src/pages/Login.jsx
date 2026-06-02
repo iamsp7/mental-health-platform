@@ -10,12 +10,12 @@ const TOAST_ID = "login-toast";
 
 /* ---------------- PASSWORD STRENGTH ---------------- */
 
-function getPasswordStrength(pw) {
-  if (!pw) return { label: "", width: "0%" };
-  if (pw.length < 6) return { label: "Weak", width: "33%" };
-  if (pw.length < 8) return { label: "Medium", width: "66%" };
-  return { label: "Strong", width: "100%" };
-}
+// function getPasswordStrength(pw) {
+//   if (!pw) return { label: "", width: "0%" };
+//   if (pw.length < 6) return { label: "Weak", width: "33%" };
+//   if (pw.length < 8) return { label: "Medium", width: "66%" };
+//   return { label: "Strong", width: "100%" };
+// }
 
 export default function Login({ onLogin }) {
 
@@ -27,7 +27,7 @@ export default function Login({ onLogin }) {
   const [errors, setErrors] = useState({});
 
   const toastShownRef = useRef(false);
-  const strength = getPasswordStrength(password);
+  // const strength = getPasswordStrength(password);
 
   /* ---------------- VALIDATION ---------------- */
 
